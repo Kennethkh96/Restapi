@@ -1,0 +1,82 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body class="container-fluid">
+    <div class="row">
+        <input placeholder="ID" type="text" name="id" id="id" class="form-control" required="required" /><br/>
+        <div class="col-lg-4">
+            <form action="http://localhost:3000/api/quotes/" method="POST" id="add"
+            onsubmit="this.action += 'create'">
+                <h2>Add quote</h2>
+                <input placeholder="Title" type="text" name="title" class="form-control" /><br/>
+                <input placeholder="Description" type="text" name="description" class="form-control" /><br/>
+                <input type="submit" value="Add quote!" class="form-control" />
+            </form>
+
+        </div>
+        <div class="col-lg-4">
+            <form action="http://localhost:3000/api/quotes/" method="PUT" 
+            onsubmit="this.action += document.getElementById('id').value + '/update'">
+            <h2>Update quote</h2>
+            <input placeholder="Title" type="text" name="title" class="form-control" /><br/>
+            <input placeholder="Description" type="text" name="description" class="form-control" /><br/>
+            <input type="submit" value="Update quote!" class="form-control" />
+            </form>
+
+        </div>
+        <div class="col-lg-4">
+            <form action="http://localhost:3000/api/quotes/" method="DELETE"
+            onsubmit="this.action += document.getElementById('id').value + '/delete'">
+            <h2>Delete quote</h2>
+            <input type="submit" value="Delete quote!" class="form-control" />
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <form action="http://localhost:3000/quotes/list" method="POST">
+                <h2>List of quotes</h2>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var baseurl = "http://localhost:3000/api/quotes/";
+        $('document').ready(function () {
+            $('form').submit(function (event) {
+                event.preventDefault();
+                var form = $(this);
+
+                $.ajax(
+                    {
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        method: form.attr('method'),
+                        success: function(response) 
+                        {
+                            console.log(response);
+                        }
+                    });
+                    
+                console.log(form.attr('action'));
+                $(this).attr('action', baseurl);
+               
+                return false;
+            });
+            
+        });
+    </script>
+    
+</body>
+
+</html>

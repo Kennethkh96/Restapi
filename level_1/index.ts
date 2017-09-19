@@ -2,6 +2,12 @@ import * as Express from 'express';
 import * as BodyParser from 'body-parser';
 
 let app = Express();
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    next();
+});
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({extended: true}));
 
@@ -36,9 +42,25 @@ app.post("/api/quotes/create", (req, resp) => {
         });
         
         result = quotes;
+
+        console.log("added item");
     resp.json(result);
 });
+app.delete("/api/quotes/:id/delete", (req, resp) => {
+    let id = req.params.id;
 
+    quotes.splice(id, 1);
+
+    resp.json("deleted quote: " + id);
+
+});
+app.put("/api/quotes/:id/update", (req, resp) => {
+    let id = req.params.id;
+    quotes[id].Title = req.body.title;
+    quotes[id].Desc = req.body.description;
+
+    resp.json("quote: " + id + " has been updated");
+});
 app.post("/api/quotes/:id/upvote", (req, resp) => {
     let id = req.params.id;
     quotes[id].votes += 1;
@@ -69,14 +91,13 @@ app.post("/api/quotes/newest", (req, resp) => {
 app.post("/api/quotes/toprated", (req, resp) => {
     let result;
     quotes.sort((a, b) => b.votes > a.votes ? 1 : -1);
-
-    if (quotes.length > 10) 
-        result = quotes.slice(0, 10);
-    else
-        result = quotes;
+    result = quotes.slice(0, 10);
 
     resp.json(result);
 });
 
 
 app.listen(3000);
+
+
+
