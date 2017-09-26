@@ -5,17 +5,21 @@ var BodyParser = require("body-parser");
 var HTTP = require("http-status-codes");
 var Fs = require("fs");
 var app = Express();
-app.all('/*', function (req, res, next) {
+/*
+app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     next();
-});
+});*/
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
-var board = Fs.readFileSync("board.txt");
+var board = Fs.readFileSync("board.txt").toString();
+app.get("/", function (req, resp) {
+    resp.status(HTTP.OK).sendFile(__dirname + "/index.html");
+});
 app.get("/kanban/api", function (req, resp) {
-    resp.status(HTTP.OK).send("" + board);
+    resp.status(HTTP.OK).send(board);
 });
 app.post("/kanban/api", function (req, resp) {
     board = req.body;
