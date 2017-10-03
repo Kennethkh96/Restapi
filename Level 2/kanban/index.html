@@ -393,7 +393,10 @@
       $('#login_modal').modal();
       $('#btn-submit').click(function () {
         let form = $('#login-form');
-        LoginCheck(callApi(form.attr('method'), form.attr('action'), JSON.stringify({ username: "test", password: "test" })));
+        LoginCheck(
+          callApi(form.attr('method'), 
+          form.attr('action'), 
+          JSON.stringify({ username: $('#username').val(), password: $('#password').val() })));
       });
     }
 
@@ -423,11 +426,11 @@
           <form action="/login" id="login-form" method="post">
             <div class="form-group">
               <label for="username">Username:</label>
-              <input type="text" name="username">
+              <input type="text" name="username" id="username">
             </div>
             <div class="form-group">
               <label for="password">password:</label>
-              <input type="password" name="password">
+              <input type="password" name="password" id="password">
             </div>
             <button type="button" class="btn btn-default" id="btn-submit">Login</button>
           </form>
